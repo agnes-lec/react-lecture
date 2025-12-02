@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vanilla JS Counter</title>
+</head>
+<body>
+  <h2>Vanilla JS Counter</h2>
+  <button id="btn">Click</button>
+  <p id="count">0</p>
+
+  <script>
+    let count = 0;
+    const btn = document.getElementById("btn");
+    const countDisplay = document.getElementById("count");
+
+    btn.addEventListener("click", () => {
+      count++;
+      countDisplay.innerText = count;
+    });
+  </script>
+</body>
+</html>
