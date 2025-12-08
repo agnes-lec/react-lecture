@@ -2,13 +2,7 @@
 // Reducer Logic (Pure Functions)
 // ==========================================
 
-export const initialTasks = [
-  { id: 0, text: 'React 기본 문법 익히기', done: true },
-  { id: 1, text: 'React 컴포넌트 구조 잡기', done: false },
-  { id: 2, text: 'DB 스키마 정의', done: false },
-  { id: 3, text: 'AI 기반 영수증 OCR 구매 물품 관리 시스템 실습 프로젝트', done: false },
-  { id: 4, text: 'API 명세서 작성', done: false },
-];
+export const initialTasks = [];
 
 export function tasksReducer(tasks, action) {
   switch (action.type) {
@@ -34,11 +28,13 @@ export function tasksReducer(tasks, action) {
     case 'deleted': {
       return tasks.filter((t) => t.id !== action.id);
     }
+    case 'loaded': {
+      // API에서 로드한 전체 Task 목록으로 교체
+      return action.tasks;
+    }
     default: {
       throw new Error('Unknown action: ' + action.type);
     }
   }
 }
-
-export let nextId = 5;
 
