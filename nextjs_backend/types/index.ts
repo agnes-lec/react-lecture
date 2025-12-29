@@ -15,6 +15,7 @@ export interface ExpenseResponse {
   totalAmount: number;
   category: string | null;
   description: string | null;
+  userId: number;
   items: ExpenseItemResponse[];
   createdAt: string;
 }
@@ -30,15 +31,6 @@ export interface PagedExpenseResponse {
   last: boolean;
   numberOfElements: number;
   empty: boolean;
-}
-
-// Task 응답
-export interface TaskResponse {
-  id: number;
-  text: string;
-  done: boolean;
-  userId: string;
-  createdAt: string;
 }
 
 // 사용자 응답
@@ -59,6 +51,15 @@ export interface AuthResponse {
   email: string;
   name: string;
   message?: string;
+}
+
+// Task 응답
+export interface TaskResponse {
+  id: number;
+  text: string;
+  done: boolean;
+  userId: number;
+  createdAt: string;
 }
 
 // 에러 응답

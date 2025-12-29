@@ -12,19 +12,21 @@ datasource db {
 
 // 사용자 모델
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   password  String
   name      String
-  role      String   @default("일반사용자")
-  status    String   @default("활성")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      String    @default("일반사용자")
+  status    String    @default("활성")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  tasks     Task[]
+  expenses  Expense[]
 
   @@map("users")
 }
 
-// 지출 내역 모델
+// 지출 내역 모델 (User 1 : Expense 다)
 model Expense {
   id          Int           @id @default(autoincrement())
   merchant    String
@@ -32,6 +34,8 @@ model Expense {
   totalAmount Float
   category    String?
   description String?
+  userId      Int
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       ExpenseItem[]
   createdAt   DateTime      @default(now())
 
@@ -49,14 +53,14 @@ model ExpenseItem {
   @@map("expense_items")
 }
 
-// Task 모델
+// Task 모델 (User 1 : Task 다)
 model Task {
   id        Int      @id @default(autoincrement())
   text      String
   done      Boolean  @default(false)
-  userId    String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@map("tasks")
 }
-
