@@ -4,10 +4,11 @@ import prisma from '@/lib/prisma';
 // GET /api/expenses/:id - 지출 내역 상세 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -56,10 +57,11 @@ export async function GET(
 // DELETE /api/expenses/:id - 지출 내역 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -96,4 +98,3 @@ export async function DELETE(
     );
   }
 }
-
