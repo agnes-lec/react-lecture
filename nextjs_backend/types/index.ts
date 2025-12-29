@@ -32,6 +32,15 @@ export interface PagedExpenseResponse {
   empty: boolean;
 }
 
+// Task 응답
+export interface TaskResponse {
+  id: number;
+  text: string;
+  done: boolean;
+  userId: string;
+  createdAt: string;
+}
+
 // 사용자 응답
 export interface UserResponse {
   id: number;
