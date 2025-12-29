@@ -10,7 +10,7 @@ export async function GET(
     const { id: idParam } = await params;
     const id = parseInt(idParam);
     const searchParams = request.nextUrl.searchParams;
-    const userId = searchParams.get('userId');
+    const userIdParam = searchParams.get('userId');
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -19,9 +19,17 @@ export async function GET(
       );
     }
 
-    if (!userId) {
+    if (!userIdParam) {
       return NextResponse.json(
         { error: 'userId 파라미터가 필요합니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = parseInt(userIdParam);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
         { status: 400 }
       );
     }
@@ -65,7 +73,7 @@ export async function PUT(
     const { id: idParam } = await params;
     const id = parseInt(idParam);
     const body = await request.json();
-    const { text, done, userId } = body;
+    const { text, done, userId: userIdParam } = body;
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -74,9 +82,17 @@ export async function PUT(
       );
     }
 
-    if (!userId) {
+    if (userIdParam === undefined || userIdParam === null) {
       return NextResponse.json(
         { error: 'userId는 필수입니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = typeof userIdParam === 'string' ? parseInt(userIdParam) : userIdParam;
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
         { status: 400 }
       );
     }
@@ -132,7 +148,7 @@ export async function DELETE(
     const { id: idParam } = await params;
     const id = parseInt(idParam);
     const searchParams = request.nextUrl.searchParams;
-    const userId = searchParams.get('userId');
+    const userIdParam = searchParams.get('userId');
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -141,9 +157,17 @@ export async function DELETE(
       );
     }
 
-    if (!userId) {
+    if (!userIdParam) {
       return NextResponse.json(
         { error: 'userId 파라미터가 필요합니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = parseInt(userIdParam);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
         { status: 400 }
       );
     }

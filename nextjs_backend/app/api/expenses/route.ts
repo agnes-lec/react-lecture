@@ -21,6 +21,7 @@ export async function GET() {
       totalAmount: expense.totalAmount,
       category: expense.category,
       description: expense.description,
+      userId: expense.userId,
       items: expense.items.map((item) => ({
         id: item.id,
         name: item.name,

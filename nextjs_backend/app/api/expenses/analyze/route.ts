@@ -7,6 +7,23 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const image = formData.get('image') as File | null;
+    const userIdParam = formData.get('userId') as string | null;
+
+    // userId 검증
+    if (!userIdParam) {
+      return NextResponse.json(
+        { error: 'userId가 필요합니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = parseInt(userIdParam);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
+        { status: 400 }
+      );
+    }
 
     // 이미지 파일 검증
     if (!image) {
@@ -34,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`영수증 분석 시작: 파일명=${image.name}, 크기=${image.size} bytes, MIME=${mimeType}`);
+    console.log(`영수증 분석 시작: 파일명=${image.name}, 크기=${image.size} bytes, MIME=${mimeType}, userId=${userId}`);
 
     // 이미지를 Base64로 변환
     const bytes = await image.arrayBuffer();
@@ -45,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`분석 결과: 상호명=${analysisResult.merchant}, 금액=${analysisResult.totalAmount}`);
 
-    // DB에 저장
+    // DB에 저장 (userId 포함)
     const expense = await prisma.expense.create({
       data: {
         merchant: analysisResult.merchant,
@@ -53,6 +70,7 @@ export async function POST(request: NextRequest) {
         totalAmount: analysisResult.totalAmount,
         category: analysisResult.category,
         description: analysisResult.description,
+        userId,
         items: {
           create: analysisResult.items.map((item) => ({
             name: item.name,
@@ -72,6 +90,7 @@ export async function POST(request: NextRequest) {
       totalAmount: expense.totalAmount,
       category: expense.category,
       description: expense.description,
+      userId: expense.userId,
       items: expense.items.map((item) => ({
         id: item.id,
         name: item.name,
@@ -87,4 +106,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

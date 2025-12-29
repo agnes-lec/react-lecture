@@ -5,11 +5,19 @@ import prisma from '@/lib/prisma';
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const userId = searchParams.get('userId');
+    const userIdParam = searchParams.get('userId');
 
-    if (!userId) {
+    if (!userIdParam) {
       return NextResponse.json(
         { error: 'userId 파라미터가 필요합니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = parseInt(userIdParam);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
         { status: 400 }
       );
     }
@@ -22,7 +30,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(
-      tasks.map((task: { id: number; text: string; done: boolean; userId: string; createdAt: Date }) => ({
+      tasks.map((task) => ({
         id: task.id,
         text: task.text,
         done: task.done,
@@ -43,12 +51,20 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { text, done, userId } = body;
+    const { text, done, userId: userIdParam } = body;
 
     // 유효성 검증
-    if (!userId) {
+    if (userIdParam === undefined || userIdParam === null) {
       return NextResponse.json(
         { error: 'userId는 필수입니다' },
+        { status: 400 }
+      );
+    }
+
+    const userId = typeof userIdParam === 'string' ? parseInt(userIdParam) : userIdParam;
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { error: '유효하지 않은 userId입니다' },
         { status: 400 }
       );
     }
@@ -87,4 +103,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
