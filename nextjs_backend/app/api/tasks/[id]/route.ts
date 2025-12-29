@@ -4,10 +4,11 @@ import prisma from '@/lib/prisma';
 // GET /api/tasks/:id?userId=xxx - 특정 Task 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('userId');
 
@@ -58,10 +59,11 @@ export async function GET(
 // PUT /api/tasks/:id - Task 수정
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     const body = await request.json();
     const { text, done, userId } = body;
 
@@ -124,10 +126,11 @@ export async function PUT(
 // DELETE /api/tasks/:id?userId=xxx - Task 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     const searchParams = request.nextUrl.searchParams;
     const userId = searchParams.get('userId');
 
@@ -174,4 +177,3 @@ export async function DELETE(
     );
   }
 }
-
