@@ -5,7 +5,7 @@ import { authenticateRequest, hashPassword } from '@/lib/auth';
 // GET /api/users/:id - 사용자 상세 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const auth = authenticateRequest(request);
@@ -16,7 +16,8 @@ export async function GET(
       );
     }
 
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: '유효하지 않은 ID입니다' },
@@ -61,7 +62,7 @@ export async function GET(
 // PUT /api/users/:id - 사용자 정보 수정
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const auth = authenticateRequest(request);
@@ -72,7 +73,8 @@ export async function PUT(
       );
     }
 
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: '유효하지 않은 ID입니다' },
@@ -156,7 +158,7 @@ export async function PUT(
 // DELETE /api/users/:id - 사용자 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const auth = authenticateRequest(request);
@@ -167,7 +169,8 @@ export async function DELETE(
       );
     }
 
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: '유효하지 않은 ID입니다' },
@@ -203,4 +206,3 @@ export async function DELETE(
     );
   }
 }
-
