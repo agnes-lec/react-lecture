@@ -45,6 +45,9 @@ async function main() {
       totalAmount: 15000,
       category: '식음료',
       description: '카페 음료 구매',
+      user: {
+        connect: { id: user1.id } 
+      },
       items: {
         create: [
           { name: '아메리카노', amount: 5000 },
@@ -63,6 +66,9 @@ async function main() {
       totalAmount: 45000,
       category: '쇼핑',
       description: '장보기',
+      user: {
+        connect: { id: user1.id } 
+      },
       items: {
         create: [
           { name: '우유', amount: 3000 },
@@ -83,6 +89,9 @@ async function main() {
       totalAmount: 12500,
       category: '교통',
       description: '택시 이용',
+      user: {
+        connect: { id: user1.id } 
+      },
       items: {
         create: [
           { name: '기본요금', amount: 4800 },
@@ -100,6 +109,9 @@ async function main() {
       totalAmount: 28000,
       category: '쇼핑',
       description: '화장품 구매',
+      user: {
+        connect: { id: user1.id } 
+      },
       items: {
         create: [
           { name: '선크림', amount: 18000 },
@@ -117,6 +129,9 @@ async function main() {
       totalAmount: 9500,
       category: '식음료',
       description: '점심 식사',
+      user: {
+        connect: { id: user1.id } 
+      },
       items: {
         create: [
           { name: '빅맥세트', amount: 8000 },
@@ -132,7 +147,7 @@ async function main() {
     data: {
       text: '프로젝트 계획 수립',
       done: true,
-      userId: user1.id.toString(),
+      userId: user1.id,
     },
   });
   console.log(`✅ Task 생성: ${task1.text}`);
@@ -141,7 +156,7 @@ async function main() {
     data: {
       text: 'API 개발',
       done: false,
-      userId: user1.id.toString(),
+      userId: user1.id,
     },
   });
   console.log(`✅ Task 생성: ${task2.text}`);
@@ -150,7 +165,7 @@ async function main() {
     data: {
       text: '테스트 작성',
       done: false,
-      userId: user1.id.toString(),
+      userId: user1.id,
     },
   });
   console.log(`✅ Task 생성: ${task3.text}`);
@@ -167,11 +182,10 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ 시딩 오류:', e);
+.catch((e) => {
+    console.error('Seeding Error!', e);
     process.exit(1);
-  })
-  .finally(async () => {
+})
+.finally(async () => {
     await prisma.$disconnect();
-  });
-
+});
